@@ -1,0 +1,2 @@
+* company-sage
+  =company= backend for =sage-shell-mode=
