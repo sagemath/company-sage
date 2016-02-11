@@ -86,6 +86,32 @@
                  (sage-shell-cpl:candidates :state company-sage--state
                                             :regexp arg))))))
 
+(defun company-sage--meta (can)
+  (case major-mode
+    (sage-shell-mode
+     (when (string= "sage"
+                    (sage-shell-cpl:get-current 'interface))
+       (cl-destructuring-bind (base-name . name)
+           (company-sage-repl--base-name-and-name can)
+         (sage-shell:trim-right
+          (sage-shell:send-command-to-string
+           (format "%s('%s'%s)"
+                   (sage-shell:py-mod-func "print_one_line_doc")
+                   name
+                   (sage-shell:aif base-name
+                       (format ", base_name='%s'" it)
+                     "")))))))))
+
+(defun company-sage-repl--base-name-and-name (can)
+  (let* ((base-name
+          (or (sage-shell-cpl:get-current 'var-base-name)
+              (sage-shell:in (sage-shell-cpl:get-current 'interface)
+                             sage-shell-interfaces:other-interfaces)))
+         (name (sage-shell:aif base-name
+                   (format "%s.%s" it can)
+                 can)))
+    (cons base-name name)))
+
 ;;;###autoload
 (defun company-sage (command &optional arg &rest _args)
   (interactive (list 'interactive))
