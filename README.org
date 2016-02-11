@@ -1,2 +1,3 @@
 * company-sage
+  [[https://travis-ci.org/stakemori/company-sage][https://travis-ci.org/stakemori/company-sage.svg]]
   =company= backend for =sage-shell-mode=
