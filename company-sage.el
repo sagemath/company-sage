@@ -4,7 +4,7 @@
 ;; URL: https://github.com/stakemori/auto-complete-sage
 ;; Keywords: Sage, math, company
 ;; Version: 0.0.1
-;; Package-Requires: ((macs "24.1") (company "0.9.0-cvs") (sage-shell-mode "0.0.8"))
+;; Package-Requires: ((Emacs "24.1") (company "0.9.0-cvs") (sage-shell-mode "0.0.8"))
 
 ;;; License
 ;; This program is free software; you can redistribute it and/or modify
