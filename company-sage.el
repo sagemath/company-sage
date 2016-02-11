@@ -35,11 +35,12 @@
     (sage-shell:sage-mode
      (setq company-sage--state
            (sage-shell-edit:parse-current-state))
+     (progn
+        (unless (and sage-shell:process-buffer
+                     (bufferp sage-shell:process-buffer)
+                     (get-buffer sage-shell:process-buffer))
+          (sage-shell-edit:set-sage-proc-buf-internal nil nil)))
      (and
-      (progn
-        (sage-shell-edit:set-sage-proc-buf-internal nil nil)
-        sage-shell:process-buffer)
-      (get-buffer sage-shell:process-buffer)
       (sage-shell:redirect-finished-p)
       (sage-shell:output-finished-p)
       (not (company-in-string-or-comment))
