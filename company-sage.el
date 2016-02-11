@@ -30,16 +30,20 @@
 (defun company-sage--prefix ()
   (case major-mode
     (sage-shell-mode (sage-shell-cpl:parse-and-set-state)
-                     (or (company-grab-symbol-cons "\\." 2)
-                         'stop))
+                     (and (not (and (company-in-string-or-comment)
+                                    (string=
+                                     (sage-shell-cpl:get-current 'interface)
+                                     "sage")))
+                          (or (company-grab-symbol-cons "\\." 2)
+                              'stop)))
     (sage-shell:sage-mode
      (setq company-sage--state
            (sage-shell-edit:parse-current-state))
      (progn
-        (unless (and sage-shell:process-buffer
-                     (bufferp sage-shell:process-buffer)
-                     (get-buffer sage-shell:process-buffer))
-          (sage-shell-edit:set-sage-proc-buf-internal nil nil)))
+       (unless (and sage-shell:process-buffer
+                    (bufferp sage-shell:process-buffer)
+                    (get-buffer sage-shell:process-buffer))
+         (sage-shell-edit:set-sage-proc-buf-internal nil nil)))
      (and
       (sage-shell:redirect-finished-p)
       (sage-shell:output-finished-p)
@@ -68,12 +72,14 @@
      :compl-state sage-shell-cpl:current-state)
     (sage-shell:after-redirect-finished
       (funcall callback
-               (let* ((case-fold-search nil)
-                      (cands (sage-shell-cpl:candidates :regexp arg)))
-                 (if (sage-shell:in "interface" types)
-                     (append (all-completions arg company-sage--repl-python-kwds)
-                             cands)
-                   cands))))))
+               (let ((case-fold-search nil)
+                     (cands (sage-shell-cpl:candidates)))
+                 (sage-shell:->>
+                  (if (sage-shell:in "interface" types)
+                      (append company-sage--repl-python-kwds
+                              cands)
+                    cands)
+                  (all-completions arg)))))))
 
 
 (defun company-sage--candidates-async (callback arg)
@@ -84,8 +90,9 @@
     (sage-shell:after-redirect-finished
       (funcall callback
                (let ((case-fold-search nil))
-                 (sage-shell-cpl:candidates :state company-sage--state
-                                            :regexp arg))))))
+                 (all-completions
+                  arg
+                  (sage-shell-cpl:candidates :state company-sage--state)))))))
 
 (defun company-sage--meta (can)
   (case major-mode
