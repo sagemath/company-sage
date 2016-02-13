@@ -34,8 +34,7 @@
                                     (string=
                                      (sage-shell-cpl:get-current 'interface)
                                      "sage")))
-                          (or (company-grab-symbol-cons "\\." 2)
-                              'stop)))
+                          (company-grab-symbol)))
     (sage-shell:sage-mode
      (setq company-sage--state
            (sage-shell-edit:parse-current-state))
@@ -49,7 +48,7 @@
       (sage-shell:redirect-finished-p)
       (sage-shell:output-finished-p)
       (not (company-in-string-or-comment))
-      (or (company-grab-symbol-cons "\\." 2) 'stop)))))
+      (company-grab-symbol)))))
 
 (defvar company-sage--repl-python-kwds
   '("abs" "all" "and" "any" "apply" "as" "assert" "basestring"
