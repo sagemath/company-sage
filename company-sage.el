@@ -45,6 +45,7 @@
                     (get-buffer sage-shell:process-buffer))
          (sage-shell-edit:set-sage-proc-buf-internal nil nil)))
      (and
+      sage-shell:process-buffer
       (sage-shell:redirect-finished-p)
       (sage-shell:output-finished-p)
       (not (company-in-string-or-comment))
