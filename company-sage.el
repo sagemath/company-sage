@@ -136,4 +136,5 @@
         (cons :async (lambda (callback)
                        (company-sage--candidates-async callback arg))))))))
 
+(provide 'company-sage)
 ;;; company-sage.el ends here
