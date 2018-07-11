@@ -28,7 +28,7 @@
 (defvar company-sage--state nil)
 
 (defun company-sage--prefix ()
-  (case major-mode
+  (cl-case major-mode
     (sage-shell-mode (sage-shell-cpl:parse-and-set-state)
                      (and (not (and (company-in-string-or-comment)
                                     (string=
@@ -95,7 +95,7 @@
                   (sage-shell-cpl:candidates :state company-sage--state)))))))
 
 (defun company-sage--meta (can)
-  (case major-mode
+  (cl-case major-mode
     (sage-shell-mode
      (when (string= "sage"
                     (sage-shell-cpl:get-current 'interface))
@@ -128,7 +128,7 @@
     (`prefix
      (company-sage--prefix))
     (`candidates
-     (case major-mode
+     (cl-case major-mode
        (sage-shell-mode
         (cons :async (lambda (callback)
                        (company-sage--candidates-async-repl callback arg))))
